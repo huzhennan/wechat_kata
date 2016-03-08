@@ -19,17 +19,19 @@ def index(request):
     timestamp = request.GET['timestamp']
     nonce = request.GET['nonce']
 
-    if request.method == "GET":
-        echostr = request.GET['echostr']
-
-        conf = WechatConf(
+    conf = WechatConf(
             token=TOKEN,
             appid=APP_ID,
             appsecret=APP_SECRET,
             encrypt_mode="normal"
         )
 
-        wechat = WechatBasic(conf=conf)
+    wechat = WechatBasic(conf=conf)
+
+    if request.method == "GET":
+        echostr = request.GET['echostr']
+
+
         if wechat.check_signature(signature=signature, timestamp=timestamp, nonce=nonce):
             print 'Accept'
         else:
@@ -37,6 +39,7 @@ def index(request):
 
         return HttpResponse(echostr)
     elif request.method == "POST":
+        print request.POST
         return HttpResponse("%r" % request.POST)
 
 
