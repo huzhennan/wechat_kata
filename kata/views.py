@@ -45,7 +45,7 @@ def index(request):
 
 
 def _generate_url(base_url, params):
-    return base_url + "?" + urllib.urlencode(params)
+    return base_url + "?" + urllib.urlencode(params) + "#wechat_redirect"
 
 
 def _wechat_auth_url(redirect_uri):
