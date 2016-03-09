@@ -50,10 +50,10 @@ def _generate_url(base_url, params):
 
 def _wechat_auth_url(redirect_uri):
     params = [
-    ('appid', APP_ID),
-    ('redirect_uri',redirect_uri),
-    ('response_type', 'code'),
-    ('scope','snsapi_base')
+        ('appid', APP_ID),
+        ('redirect_uri', redirect_uri),
+        ('response_type', 'code'),
+        ('scope', 'snsapi_base')
     ]
     return _generate_url('https://open.weixin.qq.com/connect/oauth2/authorize', params)
 
@@ -76,12 +76,12 @@ DATA = {
                 {
                     'type': 'view',
                     'name': '搜索',
-                    'url': _wechat_auth_url('http://kezaihui/kata/menu')
+                    'url': _wechat_auth_url('http://www.zaihuiba.com/kata/menu')
                 },
                 {
                     'type': 'view',
                     'name': '视频',
-                    'url': _wechat_auth_url('http://v.qq.com/')
+                    'url': _wechat_auth_url('http://www.zaihuiba.com/kata/menu')
                 },
                 {
                     'type': 'click',
