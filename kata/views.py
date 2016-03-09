@@ -53,7 +53,8 @@ def _wechat_auth_url(redirect_uri):
         ('appid', APP_ID),
         ('redirect_uri', redirect_uri),
         ('response_type', 'code'),
-        ('scope', 'snsapi_base')
+        ('scope', 'snsapi_base'),
+        ('state', "fack")
     ]
     return _generate_url('https://open.weixin.qq.com/connect/oauth2/authorize', params)
 
