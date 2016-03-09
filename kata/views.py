@@ -1,4 +1,6 @@
 # coding=utf-8
+import urllib
+
 from django.http import HttpResponse
 from django.shortcuts import render
 import hashlib
@@ -20,17 +22,16 @@ def index(request):
     nonce = request.GET['nonce']
 
     conf = WechatConf(
-            token=TOKEN,
-            appid=APP_ID,
-            appsecret=APP_SECRET,
-            encrypt_mode="normal"
-        )
+        token=TOKEN,
+        appid=APP_ID,
+        appsecret=APP_SECRET,
+        encrypt_mode="normal"
+    )
 
     wechat = WechatBasic(conf=conf)
 
     if request.method == "GET":
         echostr = request.GET['echostr']
-
 
         if wechat.check_signature(signature=signature, timestamp=timestamp, nonce=nonce):
             print 'Accept'
@@ -39,13 +40,26 @@ def index(request):
 
         return HttpResponse(echostr)
     elif request.method == "POST":
-        print request.POST
+        print request.body
         return HttpResponse("%r" % request.POST)
 
 
+def _generate_url(base_url, params):
+    return base_url + "?" + urllib.urlencode(params)
+
+
+def _wechat_auth_url(redirect_uri):
+    params = {
+        'appid': APP_ID,
+        'redirect_uri': redirect_uri,
+        'response_type': 'code',
+        'scope': 'snsapi_base'
+    }
+    return _generate_url('https://open.weixin.qq.com/connect/oauth2/authorize', params)
+
 
 DATA = {
-    'button':[
+    'button': [
         {
             'type': 'click',
             'name': '今日歌曲',
@@ -62,12 +76,12 @@ DATA = {
                 {
                     'type': 'view',
                     'name': '搜索',
-                    'url': 'http://www.soso.com/'
+                    'url': _wechat_auth_url('http://kezaihui/kata/menu')
                 },
                 {
                     'type': 'view',
                     'name': '视频',
-                    'url': 'http://v.qq.com/'
+                    'url': _wechat_auth_url('http://v.qq.com/')
                 },
                 {
                     'type': 'click',
@@ -95,3 +109,7 @@ def menu(request):
         wechat = WechatBasic(conf=conf)
         ret = wechat.create_menu(DATA)
         return HttpResponse("%r" % ret)
+
+
+if __name__ == "__main__":
+    print _wechat_auth_url("http://www.zaihuiba.com/kata/menu")
